@@ -32,6 +32,7 @@ public class State {
         System.out.println(secretWord);
     }
 
+
    public Guess makeGuess(String newWord)
     {
         Guess newGuess;
