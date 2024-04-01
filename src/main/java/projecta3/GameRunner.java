@@ -39,13 +39,15 @@ public class GameRunner {
         {
             newestGuess = new Guess();
         }
+        assert newWord != null;
         newestGuess = gameState.makeGuess(newWord.toLowerCase());
-        return newestGuess;
+
+        return new Guess(newestGuess);
     }
 
     public boolean wasGoodGuess(String guess)
     {
-        if (gameState.getLastResult(guess) == GuessResult.INVALID)
+        if (gameState.getLastResult() == GuessResult.INVALID)
         {
             return false;
         }

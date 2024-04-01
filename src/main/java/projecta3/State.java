@@ -5,10 +5,12 @@ import java.util.Random;
 
 
 public class State {
-    ArrayList <Guess> allGuesses;
-    ArrayList <String> gameDictionary;
-    String secretWord;
-    GuessResult lastResult;
+    private ArrayList <Guess> allGuesses;
+    private final ArrayList <String> gameDictionary;
+    private final String secretWord;
+    private GuessResult lastResult;
+    private final int maxTurns = 6;
+
 
 
     public State()
@@ -33,49 +35,32 @@ public class State {
     }
 
 
-   public Guess makeGuess(String newWord)
-    {
+   public Guess makeGuess(String newWord) {
         Guess newGuess;
-        if (this.gameDictionary.contains(newWord))
-        {
+        if (this.gameDictionary.contains(newWord)) {
             newGuess = new Guess(newWord, this.secretWord);
             this.lastResult = GuessResult.VALID;
-            if (newGuess.hasWin())
-            {
+            if (newGuess.hasWin()) {
                 this.lastResult = GuessResult.MATCH;
             }
-        }
-        else if (newWord.length() >= this.secretWord.length())
-        {
+        } else if (newWord.length() >= this.secretWord.length()) {
             newGuess = new Guess(newWord.substring(0,this.secretWord.length()), this.secretWord);
-        }
-        else
-        {
+        } else {
             String paddedWord = String.format("%1$5s",newWord);
             newGuess = new Guess(paddedWord, this.secretWord);
             this.lastResult = GuessResult.INVALID;
         }
-
         allGuesses.add(newGuess);
-
-        return newGuess;
+        return new Guess(newGuess);
    }
 
-   public boolean checkWin(int maxTurns)
-   {
-       boolean hasWin = false;
-
-       if ((allGuesses.size() - 1 <= maxTurns) && (this.lastResult == GuessResult.MATCH))
-       {
-           hasWin = true;
-       }
-
-       return true;
+   public boolean checkWin() {
+       return ((allGuesses.size() <= maxTurns) && (this.lastResult == GuessResult.MATCH));
    }
 
-    public GuessResult getLastResult(String guess) {
+   public GuessResult getLastResult() {return lastResult;}
 
-        Guess dupe = new Guess(guess);
-
-    }
+   public int guessesUsed() {
+        return allGuesses.size();
+   }
 }

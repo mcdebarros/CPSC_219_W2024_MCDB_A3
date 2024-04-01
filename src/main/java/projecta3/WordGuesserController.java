@@ -29,8 +29,6 @@ public class WordGuesserController {
                 wordGrid.add(new Label(), i, j);
             }
         }
-
-
     }
 
     public WordGuesserController(GameRunner myGame)
@@ -46,9 +44,6 @@ public class WordGuesserController {
         String currentWord = guessField.getText();
         Guess currentGuess = myGame.processInput(currentWord);
 
-        // do something to output currentGuess.
-        System.out.println(currentGuess);
-
         if(currentGuess.hasWin())
         {
             // make a pop up
@@ -57,11 +52,16 @@ public class WordGuesserController {
         if (myGame.wasGoodGuess(currentWord)) {
             guessField.clear();
             statusLabel.setText("Making a guess");
-        }
-        else {
+            for (int i = 0; i < currentGuess.getLetterStatus().length; i++) {
+                Label label = new Label(String.valueOf(currentGuess.getLetterStatus()[i]));
+                wordGrid.add(label,i,(myGame.gameState.guessesUsed()) - 1);
+                label.setStyle("-fx-alignment: CENTER;");
+            }
+            if (myGame.gameState.checkWin()) {
+
+            }
+        } else {
             statusLabel.setText("Uhoh");
         }
     }
-
-
 }
