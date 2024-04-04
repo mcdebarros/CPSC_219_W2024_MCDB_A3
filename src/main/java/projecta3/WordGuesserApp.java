@@ -19,7 +19,7 @@ public class WordGuesserApp extends Application {
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(WordGuesserApp.class.getResource("word-guesser.fxml"));
         fxmlLoader.setController(new WordGuesserController(myGame));
-        Scene scene = new Scene(fxmlLoader.load(), 480, 240);
+        Scene scene = new Scene(fxmlLoader.load(), 1080, 720);
         stage.setTitle("Word Guessing Game!");
         stage.setScene(scene);
         stage.show();

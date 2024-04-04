@@ -3,10 +3,9 @@ package projecta3;
 import java.util.Arrays;
 
 public class Guess {
-    private String secretWord;
+    private final String secretWord;
     private String newGuess;
     private final int[] letterStatus;
-    private final String DEFAULT_WORD = "START";
 
     private enum LetterStates
     {
@@ -16,7 +15,7 @@ public class Guess {
     }
 
     public Guess() {
-        secretWord = new String(DEFAULT_WORD);
+        secretWord = "START";
         letterStatus = new int[secretWord.length()];
         for (int i = 0; i < secretWord.length();i++)
         {
@@ -50,15 +49,18 @@ public class Guess {
         boolean winState = true;
         for (int i = 0; i < secretWord.length(); i++)
         {
-            if (getLetterStatus()[i] < LetterStates.EXACT_MATCH.ordinal())
+            if (getLetterStatus()[i] < LetterStates.EXACT_MATCH.ordinal()) {
                 winState = false;
+                break;
+            }
         }
         return winState;
     }
 
-    public int[] getLetterStatus()
+    protected final int[] getLetterStatus()
     {
-        return letterStatus;
+        Guess dupe = new Guess(this);
+        return dupe.letterStatus;
     }
 
     @Override

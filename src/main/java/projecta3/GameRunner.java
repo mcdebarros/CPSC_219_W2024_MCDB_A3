@@ -1,19 +1,19 @@
 package projecta3;
 
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
 public class GameRunner {
-    ArrayList<String> validWords;
-    State gameState;
 
+    protected final State gameState;
+
+    @SuppressWarnings("unchecked")
     public GameRunner() {
 
-       validWords = new ArrayList<String>(); // Empty list of valid words
-       try
+        final ArrayList<String> validWords = new ArrayList<>(); // Empty list of valid words
+        try
         { // Populate list from word file
             FileReader fReader = new FileReader("sgb-words.txt");
             BufferedReader bReader = new BufferedReader(fReader);
@@ -28,8 +28,7 @@ public class GameRunner {
         {
             System.err.println("There seems to be an issue with sgb-words");
         }
-
-        gameState = new State((ArrayList<String>)validWords.clone()); // Create game state
+        gameState = new State((ArrayList<String>) validWords.clone()); // Create game state
     }
 
     public Guess processInput(String newWord)
@@ -42,15 +41,11 @@ public class GameRunner {
         assert newWord != null;
         newestGuess = gameState.makeGuess(newWord.toLowerCase());
 
-        return new Guess(newestGuess);
+        return newestGuess;
     }
 
-    public boolean wasGoodGuess(String guess)
+    public boolean wasGoodGuess()
     {
-        if (gameState.getLastResult() == GuessResult.INVALID)
-        {
-            return false;
-        }
-        return true;
+        return gameState.getLastResult() != GuessResult.INVALID;
     }
 }

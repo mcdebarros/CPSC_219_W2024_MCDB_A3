@@ -5,18 +5,16 @@ import java.util.Random;
 
 
 public class State {
-    private ArrayList <Guess> allGuesses;
+    private final ArrayList <Guess> allGuesses;
     private final ArrayList <String> gameDictionary;
     private final String secretWord;
     private GuessResult lastResult;
-    private final int maxTurns = 6;
-
 
 
     public State()
     {
         allGuesses = new ArrayList<Guess>();
-        gameDictionary = new ArrayList<String>();
+        gameDictionary = new ArrayList<>();
         secretWord = "NULLS";
         lastResult = GuessResult.NONE;
     }
@@ -26,7 +24,7 @@ public class State {
         allGuesses = new ArrayList<Guess>(); // List of used guesses
         gameDictionary = validWords; // List of valid words
         Random rng = new Random(); // rng for picking secret word
-        secretWord = (String)gameDictionary.get(rng.nextInt(gameDictionary.size() - 1));
+        secretWord = gameDictionary.get(rng.nextInt(gameDictionary.size() - 1));
 
         lastResult = GuessResult.NONE; // No guess result for initial guess.
 
@@ -34,6 +32,12 @@ public class State {
         System.out.println(secretWord);
     }
 
+    public State(State that) {
+        this.allGuesses = that.allGuesses;
+        this.gameDictionary = that.gameDictionary;
+        this.secretWord = that.secretWord;
+        this.lastResult = that.lastResult;
+    }
 
    public Guess makeGuess(String newWord) {
         Guess newGuess;
@@ -51,14 +55,18 @@ public class State {
             this.lastResult = GuessResult.INVALID;
         }
         allGuesses.add(newGuess);
-        return new Guess(newGuess);
+        return newGuess;
    }
 
    public boolean checkWin() {
+       int maxTurns = 6;
        return ((allGuesses.size() <= maxTurns) && (this.lastResult == GuessResult.MATCH));
    }
 
-   public GuessResult getLastResult() {return lastResult;}
+   public GuessResult getLastResult() {
+        State dupe = new State(this);
+        return dupe.lastResult;
+    }
 
    public int guessesUsed() {
         return allGuesses.size();
