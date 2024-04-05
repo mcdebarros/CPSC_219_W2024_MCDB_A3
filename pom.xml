@@ -34,12 +34,6 @@
       <artifactId>controlsfx</artifactId>
       <version>11.1.2</version>
     </dependency>
-<dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-api</artifactId>
-      <version>${junit.version}</version>
-      <scope>test</scope>
-    </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-engine</artifactId>
@@ -74,7 +68,7 @@
             <!-- Default configuration for running with: mvn clean javafx:run -->
             <id>default-cli</id>
             <configuration>
-              <mainClass>projecta3.cpsc_219_w2024_mcdb_a3/projecta3.cpsc_219_w2024_mcdb_a3.WordGuesserApp</mainClass>
+              <mainClass>assignmentThree.cpsc_219_w2024_mcdb_a3/assignmentThree.cpsc_219_w2024_mcdb_a3.WordGuesserApp</mainClass>
               <launcher>app</launcher>
               <jlinkZipName>app</jlinkZipName>
               <jlinkImageName>app</jlinkImageName>

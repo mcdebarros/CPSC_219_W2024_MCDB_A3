@@ -1,4 +1,4 @@
-package projecta3;
+package assignmentThree;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -9,18 +9,16 @@ import java.io.IOException;
 
 public class WordGuesserApp extends Application {
 
-    GameRunner myGame;
+    GameRunner myGame = new GameRunner();
 
-    public WordGuesserApp() {
-        myGame = new GameRunner();
-    }
+    public WordGuesserApp() {}
 
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(WordGuesserApp.class.getResource("word-guesser.fxml"));
         fxmlLoader.setController(new WordGuesserController(myGame));
-        Scene scene = new Scene(fxmlLoader.load(), 1080, 720);
-        stage.setTitle("Word Guessing Game!");
+        Scene scene = new Scene(fxmlLoader.load());
+        stage.setTitle("NotWordle");
         stage.setScene(scene);
         stage.show();
     }
