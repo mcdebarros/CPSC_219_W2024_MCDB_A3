@@ -25,7 +25,7 @@ public class GameRunner {
 
     private boolean validGuess() {return InputChecker.goodInput(latestGuess,GAME_STATE);}
 
-    protected boolean winningGuess() {return GAME_STATE.checkWin().equals("WIN");}
+    protected boolean winningGuess() {return GAME_STATE.checkWin();}
 
     protected int guessesLeft() {return State.maxGuesses() - GAME_STATE.guessesUsed();}
 
@@ -33,7 +33,7 @@ public class GameRunner {
 
     protected int[] getBoardRow() {return GAME_STATE.getLetterStates();}
 
-    protected boolean gameLost() {return GAME_STATE.checkWin().equals("LOSE");}
+    protected boolean gameLost() {return GAME_STATE.checkLoss();}
 
     protected int score() {
 
