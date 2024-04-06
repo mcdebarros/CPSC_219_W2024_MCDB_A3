@@ -12,14 +12,17 @@ import static java.lang.StringTemplate.STR;
 public class WordGuesserController {
 
     @SuppressWarnings("all")
-    private GameRunner myGame;
+    private GameRunner myGame; // GameRunner object
     @FXML @SuppressWarnings("all")
-    private TextField guessField;
+    private TextField guessField; // Input of guesses
     @FXML @SuppressWarnings("all")
-    private GridPane wordGrid;
+    private GridPane wordGrid; // Game board
     @FXML @SuppressWarnings("all")
-    private Label status;
+    private Label status; // Tracks guesses remaining
 
+    /**
+     * Default constructor for Controller
+     */
     public WordGuesserController() {
         myGame = new GameRunner();
         guessField = new TextField();
@@ -27,10 +30,8 @@ public class WordGuesserController {
         status = new Label(STR."Guesses left: \{State.maxGuesses()}");
         wordGrid.setStyle("-fx-grid-lines-visible: true;");
 
-        for (int i = 0; i < wordGrid.getRowCount(); i++)
-        {
-            for (int j = 0; j < wordGrid.getColumnCount(); j++)
-            {
+        for (int i = 0; i < wordGrid.getRowCount(); i++) { // Populate the grid with labels
+            for (int j = 0; j < wordGrid.getColumnCount(); j++) {
                 Label label = new Label();
                 label.setStyle("-fx-alignment: center;");
                 wordGrid.add(label, i, j);
@@ -38,6 +39,10 @@ public class WordGuesserController {
         }
     }
 
+    /**
+     * Constructor with externally built game
+     * @param myGame Instance of the GameRunner
+     */
     public WordGuesserController(GameRunner myGame) {
         this.myGame = myGame;
         guessField = new TextField();
@@ -56,34 +61,37 @@ public class WordGuesserController {
         }
     }
 
+    /**
+     * Action for clicking the guess button
+     */
     @FXML @SuppressWarnings("all")
     protected void onGuessButtonClick() {
 
-        String currentWord = guessField.getText();
-        boolean guessAccepted = myGame.makeGuess(currentWord);
+        String currentWord = guessField.getText(); // Get the newest guess String
+        boolean guessAccepted = myGame.makeGuess(currentWord); // Checks if the guess was valid
 
-        if (guessAccepted) {
-            guessField.clear();
-            status.setText(STR."Guesses left: \{myGame.guessesLeft()}");
-            for (int i = 0; i < State.getLength(); i++) {
-                Label label = new Label(String.valueOf(currentWord.charAt(i)).toUpperCase());
-                label.setStyle(STR."-fx-background-color: \{cellColor(myGame.getBoardRow()[i])}; -fx-font-weight: bold; -fx-alignment: center;");
-                label.setPrefWidth(100); // Adjust this width as needed
-                label.setPrefHeight(30); // Adjust this height as needed
-                wordGrid.add(label, i, 5 - myGame.guessesLeft());
+        if (guessAccepted) { // Case if good guess
+            guessField.clear(); // Clear the guess field
+            status.setText(STR."Guesses left: \{myGame.guessesLeft()}"); // Update the guess tracker label
+            for (int i = 0; i < State.getLength(); i++) { // Update the game board
+                Label label = new Label(String.valueOf(currentWord.charAt(i)).toUpperCase()); // Create label for guess character
+                label.setStyle(STR."-fx-background-color: \{cellColor(myGame.getBoardRow()[i])}; -fx-font-weight: bold; -fx-alignment: center;"); // Set the color of the cell based on correct position
+                label.setPrefWidth(100);
+                label.setPrefHeight(30);
+                wordGrid.add(label, i, 5 - myGame.guessesLeft()); // Add the label to the grid
             }
-            if (myGame.winningGuess()) {
-                Alert gameWon = new Alert(Alert.AlertType.INFORMATION);
-                gameWon.setTitle("Winner Winner Chicken Dinner!");
-                gameWon.setHeaderText(null);
-                if (myGame.guessesLeft() == 5) {
+            if (myGame.winningGuess()) { // Case if this guess won the game
+                Alert gameWon = new Alert(Alert.AlertType.INFORMATION); // Pop up to congratualte user
+                gameWon.setTitle("Winner Winner Chicken Dinner!"); // Set the title
+                gameWon.setHeaderText(null); // Skip the header
+                if (myGame.guessesLeft() == 5) { // Bonus if the user guessed in EXACTLY one guess
                     gameWon.setContentText("Wow, a perfect game, worth 17 points! The odds of this are 1/5757; are you sure you didn't cheat?");
-                } else {
+                } else { // Case if more than one guess used
                     gameWon.setContentText(String.format("Congratulations! You've won the game in %d guesses! Your score was %d points.", myGame.guessesUsed(), myGame.score()));
                 }
-                gameWon.showAndWait();
+                gameWon.showAndWait(); // Show the pop-up
                 Platform.exit(); // Close the application
-            } else if (myGame.gameLost()) {
+            } else if (myGame.gameLost()) { // Same as above, but for losing game
                 Alert gameLost = new Alert(Alert.AlertType.INFORMATION);
                 gameLost.setTitle("You suck!");
                 gameLost.setHeaderText(null);
@@ -91,7 +99,7 @@ public class WordGuesserController {
                 gameLost.showAndWait();
                 Platform.exit(); // Close the application
             }
-        } else {
+        } else { // Warn the player that the guess was invalid but do not penalize a guess
             Alert badInput = new Alert(Alert.AlertType.INFORMATION);
             badInput.setTitle("That didn't make sense!");
             badInput.setHeaderText(null);
@@ -101,8 +109,11 @@ public class WordGuesserController {
         }
     }
 
+    /**
+     * Action for clicking the help button
+     */
     @FXML @SuppressWarnings("unused")
-    protected void onHelpButtonClick() {
+    protected void onHelpButtonClick() { // Help message with game instructions
         Alert helpAlert = new Alert(Alert.AlertType.INFORMATION);
         helpAlert.setTitle("Help");
         helpAlert.setHeaderText(null);
@@ -118,8 +129,12 @@ public class WordGuesserController {
         helpAlert.showAndWait();
     }
 
+    /**
+     * Action for pressing the enter key
+     * @param ae ActionEvent of the enter key
+     */
     @FXML @SuppressWarnings("all")
-    public void onEnter(ActionEvent ae) {
+    public void onEnter(ActionEvent ae) { // Same as button click, but with enter key
 
         String currentWord = guessField.getText();
         boolean guessAccepted = myGame.makeGuess(currentWord);
@@ -163,6 +178,11 @@ public class WordGuesserController {
         }
     }
 
+    /**
+     * Colors board cells based on letterStates
+     * @param status State of this entry
+     * @return String of cell color
+     */
     private String cellColor(int status) {
         return switch (status) {
             case 0 -> "red";
